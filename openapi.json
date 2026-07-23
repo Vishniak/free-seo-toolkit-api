@@ -1,0 +1,403 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "All-in-One SEO Toolkit API",
+    "description": "Ultra-fast micro-services for SEO slugification, keyword extraction, meta inspection, and readability analysis.",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/": {
+      "get": {
+        "summary": "Root",
+        "operationId": "root__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/seo/slugify": {
+      "post": {
+        "summary": "Generate Slug",
+        "description": "Generate clean, SEO-friendly, stop-word-free URL slug.",
+        "operationId": "generate_slug_v1_seo_slugify_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SlugifyRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SlugifyResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/seo/extract-keywords": {
+      "post": {
+        "summary": "Extract Keywords",
+        "description": "Extract top keywords and calculate keyword density percentage (supports hyphenated words e.g. e-commerce).",
+        "operationId": "extract_keywords_v1_seo_extract_keywords_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/KeywordRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/KeywordResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/seo/meta-inspect": {
+      "post": {
+        "summary": "Inspect Meta",
+        "description": "Inspect HTML Meta Title, Meta Description, H1 tags, Canonical & OG tags.\nProtects memory by capping HTML inspection at 500 KB.",
+        "operationId": "inspect_meta_v1_seo_meta_inspect_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MetaInspectRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MetaInspectResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/seo/readability": {
+      "post": {
+        "summary": "Calculate Readability",
+        "description": "Calculate Word Count, Character Count, Estimated Reading Time, and Difficulty Level.",
+        "operationId": "calculate_readability_v1_seo_readability_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReadabilityRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReadabilityResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "KeywordItem": {
+        "properties": {
+          "keyword": {
+            "type": "string",
+            "title": "Keyword"
+          },
+          "count": {
+            "type": "integer",
+            "title": "Count"
+          },
+          "density_percent": {
+            "type": "number",
+            "title": "Density Percent"
+          }
+        },
+        "type": "object",
+        "required": [
+          "keyword",
+          "count",
+          "density_percent"
+        ],
+        "title": "KeywordItem"
+      },
+      "KeywordRequest": {
+        "properties": {
+          "text": {
+            "type": "string",
+            "title": "Text",
+            "example": "FastAPI is a modern, fast Web framework for Python. Python is great for AI."
+          },
+          "top_n": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": 5,
+            "title": "Top N",
+            "example": 5
+          }
+        },
+        "type": "object",
+        "required": [
+          "text"
+        ],
+        "title": "KeywordRequest"
+      },
+      "KeywordResponse": {
+        "properties": {
+          "total_words": {
+            "type": "integer",
+            "title": "Total Words"
+          },
+          "top_keywords": {
+            "items": {
+              "$ref": "#/components/schemas/KeywordItem"
+            },
+            "type": "array",
+            "title": "Top Keywords"
+          }
+        },
+        "type": "object",
+        "required": [
+          "total_words",
+          "top_keywords"
+        ],
+        "title": "KeywordResponse"
+      },
+      "MetaInspectRequest": {
+        "properties": {
+          "html_content": {
+            "type": "string",
+            "title": "Html Content",
+            "example": "<html><head><title>My Great Article Page</title><meta name='description' content='A short description here.'></head><body><h1>Main Title</h1></body></html>"
+          }
+        },
+        "type": "object",
+        "required": [
+          "html_content"
+        ],
+        "title": "MetaInspectRequest"
+      },
+      "MetaInspectResponse": {
+        "properties": {
+          "title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          },
+          "title_length": {
+            "type": "integer",
+            "title": "Title Length"
+          },
+          "title_status": {
+            "type": "string",
+            "title": "Title Status"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "description_length": {
+            "type": "integer",
+            "title": "Description Length"
+          },
+          "description_status": {
+            "type": "string",
+            "title": "Description Status"
+          },
+          "h1_count": {
+            "type": "integer",
+            "title": "H1 Count"
+          },
+          "has_canonical": {
+            "type": "boolean",
+            "title": "Has Canonical"
+          },
+          "has_og_image": {
+            "type": "boolean",
+            "title": "Has Og Image"
+          }
+        },
+        "type": "object",
+        "required": [
+          "title",
+          "title_length",
+          "title_status",
+          "description",
+          "description_length",
+          "description_status",
+          "h1_count",
+          "has_canonical",
+          "has_og_image"
+        ],
+        "title": "MetaInspectResponse"
+      },
+      "ReadabilityRequest": {
+        "properties": {
+          "text": {
+            "type": "string",
+            "title": "Text",
+            "example": "FastAPI is an asynchronous web framework built on top of Starlette and Pydantic."
+          }
+        },
+        "type": "object",
+        "required": [
+          "text"
+        ],
+        "title": "ReadabilityRequest"
+      },
+      "ReadabilityResponse": {
+        "properties": {
+          "word_count": {
+            "type": "integer",
+            "title": "Word Count"
+          },
+          "character_count": {
+            "type": "integer",
+            "title": "Character Count"
+          },
+          "estimated_reading_time_minutes": {
+            "type": "number",
+            "title": "Estimated Reading Time Minutes"
+          },
+          "reading_difficulty": {
+            "type": "string",
+            "title": "Reading Difficulty"
+          }
+        },
+        "type": "object",
+        "required": [
+          "word_count",
+          "character_count",
+          "estimated_reading_time_minutes",
+          "reading_difficulty"
+        ],
+        "title": "ReadabilityResponse"
+      },
+      "SlugifyRequest": {
+        "properties": {
+          "text": {
+            "type": "string",
+            "title": "Text",
+            "example": "10 Best AI & Python Tools for Translators in 2026!"
+          },
+          "language": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": "en",
+            "title": "Language",
+            "example": "en"
+          },
+          "remove_stopwords": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": true,
+            "title": "Remove Stopwords",
+            "example": true
+          }
+        },
+        "type": "object",
+        "required": [
+          "text"
+        ],
+        "title": "SlugifyRequest"
+      },
+      "SlugifyResponse": {
+        "properties": {
+          "original_text": {
+            "type": "string",
+            "title": "Original Text"
+          },
+          "slug": {
+            "type": "string",
+            "title": "Slug"
+          },
+          "word_count": {
+            "type": "integer",
+            "title": "Word Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "original_text",
+          "slug",
+          "word_count"
+        ],
+        "title": "SlugifyResponse"
+      }
+    }
+  }
+}
