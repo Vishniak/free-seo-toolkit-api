@@ -9,7 +9,7 @@ from pydantic import BaseModel, Field
 from slugify import slugify
 from bs4 import BeautifulSoup
 
-# Initialize FastAPI App
+# Initialize FastAPI App (v1.1.0)
 app = FastAPI(
     title="All-in-One SEO Toolkit API",
     description="Ultra-fast micro-services for SEO slugification, keyword extraction, meta inspection, readability, JSON-LD schema generation, LSI phrases, content audits, link analysis, and robots.txt generation.",
