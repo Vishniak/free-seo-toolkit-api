@@ -1,9 +1,9 @@
 {
-  "openapi": "3.0.3",
+  "openapi": "3.1.0",
   "info": {
     "title": "All-in-One SEO Toolkit API",
-    "description": "Ultra-fast micro-services for SEO slugification, keyword extraction, meta inspection, and readability analysis.",
-    "version": "1.0.0"
+    "description": "Ultra-fast micro-services for SEO slugification, keyword extraction, meta inspection, readability, JSON-LD schema generation, LSI phrases, content audits, link analysis, and robots.txt generation.",
+    "version": "1.1.0"
   },
   "paths": {
     "/": {
@@ -47,6 +47,16 @@
                 }
               }
             }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
           }
         }
       }
@@ -54,7 +64,7 @@
     "/v1/seo/extract-keywords": {
       "post": {
         "summary": "Extract Keywords",
-        "description": "Extract top keywords and calculate keyword density percentage (supports hyphenated words e.g. e-commerce).",
+        "description": "Extract top keywords and calculate keyword density percentage.",
         "operationId": "extract_keywords_v1_seo_extract_keywords_post",
         "requestBody": {
           "content": {
@@ -76,6 +86,16 @@
                 }
               }
             }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
           }
         }
       }
@@ -83,7 +103,7 @@
     "/v1/seo/meta-inspect": {
       "post": {
         "summary": "Inspect Meta",
-        "description": "Inspect HTML Meta Title, Meta Description, H1 tags, Canonical & OG tags.\nProtects memory by capping HTML inspection at 500 KB.",
+        "description": "Inspect HTML Meta Title, Meta Description, H1 tags, Canonical & OG tags.",
         "operationId": "inspect_meta_v1_seo_meta_inspect_post",
         "requestBody": {
           "content": {
@@ -102,6 +122,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/MetaInspectResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
                 }
               }
             }
@@ -134,6 +164,211 @@
                 }
               }
             }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/seo/schema-generate": {
+      "post": {
+        "summary": "Generate Schema",
+        "description": "Generate valid JSON-LD Structured Data (Schema.org) for Article, Product, or FAQ.",
+        "operationId": "generate_schema_v1_seo_schema_generate_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SchemaGenerateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SchemaGenerateResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/seo/lsi-keywords": {
+      "post": {
+        "summary": "Extract Lsi Keywords",
+        "description": "Extract N-gram phrases (2-word and 3-word co-occurrences) for LSI Keyword Analysis.",
+        "operationId": "extract_lsi_keywords_v1_seo_lsi_keywords_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LsiKeywordsRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LsiKeywordsResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/seo/content-audit": {
+      "post": {
+        "summary": "Audit Content",
+        "description": "Perform a heuristic Helpful Content audit (word count, paragraph structure, readability score).",
+        "operationId": "audit_content_v1_seo_content_audit_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ContentAuditRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContentAuditResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/seo/link-check": {
+      "post": {
+        "summary": "Check Links",
+        "description": "Extract and classify internal vs external links, anchor text, and nofollow attributes from HTML.",
+        "operationId": "check_links_v1_seo_link_check_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LinkCheckRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LinkCheckResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/seo/robots-generator": {
+      "post": {
+        "summary": "Generate Robots",
+        "description": "Generate clean robots.txt directives and Sitemap declaration.",
+        "operationId": "generate_robots_v1_seo_robots_generator_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RobotsGeneratorRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RobotsGeneratorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
           }
         }
       }
@@ -141,6 +376,94 @@
   },
   "components": {
     "schemas": {
+      "ContentAuditRequest": {
+        "properties": {
+          "text_or_html": {
+            "type": "string",
+            "title": "Text Or Html",
+            "example": "<h1>Title</h1><p>First long paragraph about SEO optimization and best practices for developers.</p><p>Second paragraph providing actionable tips.</p>"
+          }
+        },
+        "type": "object",
+        "required": [
+          "text_or_html"
+        ],
+        "title": "ContentAuditRequest"
+      },
+      "ContentAuditResponse": {
+        "properties": {
+          "word_count": {
+            "type": "integer",
+            "title": "Word Count"
+          },
+          "paragraph_count": {
+            "type": "integer",
+            "title": "Paragraph Count"
+          },
+          "avg_words_per_sentence": {
+            "type": "number",
+            "title": "Avg Words Per Sentence"
+          },
+          "helpful_content_score": {
+            "type": "integer",
+            "title": "Helpful Content Score"
+          },
+          "thin_content_warning": {
+            "type": "boolean",
+            "title": "Thin Content Warning"
+          },
+          "recommendations": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Recommendations"
+          }
+        },
+        "type": "object",
+        "required": [
+          "word_count",
+          "paragraph_count",
+          "avg_words_per_sentence",
+          "helpful_content_score",
+          "thin_content_warning",
+          "recommendations"
+        ],
+        "title": "ContentAuditResponse"
+      },
+      "FAQItem": {
+        "properties": {
+          "question": {
+            "type": "string",
+            "title": "Question",
+            "example": "What is FastAPI?"
+          },
+          "answer": {
+            "type": "string",
+            "title": "Answer",
+            "example": "FastAPI is a high-performance Python web framework."
+          }
+        },
+        "type": "object",
+        "required": [
+          "question",
+          "answer"
+        ],
+        "title": "FAQItem"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
       "KeywordItem": {
         "properties": {
           "keyword": {
@@ -180,8 +503,8 @@
                 "type": "null"
               }
             ],
-            "default": 5,
             "title": "Top N",
+            "default": 5,
             "example": 5
           }
         },
@@ -211,6 +534,170 @@
           "top_keywords"
         ],
         "title": "KeywordResponse"
+      },
+      "LinkCheckRequest": {
+        "properties": {
+          "html_content": {
+            "type": "string",
+            "title": "Html Content",
+            "example": "<html><body><a href='/about'>About Us</a><a href='https://google.com' rel='nofollow'>Google</a></body></html>"
+          },
+          "base_domain": {
+            "type": "string",
+            "title": "Base Domain",
+            "default": "example.com",
+            "example": "example.com"
+          }
+        },
+        "type": "object",
+        "required": [
+          "html_content"
+        ],
+        "title": "LinkCheckRequest"
+      },
+      "LinkCheckResponse": {
+        "properties": {
+          "total_links": {
+            "type": "integer",
+            "title": "Total Links"
+          },
+          "internal_links_count": {
+            "type": "integer",
+            "title": "Internal Links Count"
+          },
+          "external_links_count": {
+            "type": "integer",
+            "title": "External Links Count"
+          },
+          "nofollow_links_count": {
+            "type": "integer",
+            "title": "Nofollow Links Count"
+          },
+          "links": {
+            "items": {
+              "$ref": "#/components/schemas/LinkItem"
+            },
+            "type": "array",
+            "title": "Links"
+          }
+        },
+        "type": "object",
+        "required": [
+          "total_links",
+          "internal_links_count",
+          "external_links_count",
+          "nofollow_links_count",
+          "links"
+        ],
+        "title": "LinkCheckResponse"
+      },
+      "LinkItem": {
+        "properties": {
+          "href": {
+            "type": "string",
+            "title": "Href"
+          },
+          "anchor_text": {
+            "type": "string",
+            "title": "Anchor Text"
+          },
+          "is_internal": {
+            "type": "boolean",
+            "title": "Is Internal"
+          },
+          "is_nofollow": {
+            "type": "boolean",
+            "title": "Is Nofollow"
+          }
+        },
+        "type": "object",
+        "required": [
+          "href",
+          "anchor_text",
+          "is_internal",
+          "is_nofollow"
+        ],
+        "title": "LinkItem"
+      },
+      "LsiKeywordsRequest": {
+        "properties": {
+          "text": {
+            "type": "string",
+            "title": "Text",
+            "example": "FastAPI is great for building high performance web APIs. High performance web applications use FastAPI."
+          },
+          "min_words": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 3.0,
+                "minimum": 2.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Min Words",
+            "default": 2,
+            "example": 2
+          },
+          "max_words": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 4.0,
+                "minimum": 2.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Words",
+            "default": 3,
+            "example": 3
+          },
+          "top_n": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 50.0,
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Top N",
+            "default": 10,
+            "example": 10
+          }
+        },
+        "type": "object",
+        "required": [
+          "text"
+        ],
+        "title": "LsiKeywordsRequest"
+      },
+      "LsiKeywordsResponse": {
+        "properties": {
+          "total_phrases_extracted": {
+            "type": "integer",
+            "title": "Total Phrases Extracted"
+          },
+          "top_ngrams": {
+            "items": {
+              "$ref": "#/components/schemas/NgramItem"
+            },
+            "type": "array",
+            "title": "Top Ngrams"
+          }
+        },
+        "type": "object",
+        "required": [
+          "total_phrases_extracted",
+          "top_ngrams"
+        ],
+        "title": "LsiKeywordsResponse"
       },
       "MetaInspectRequest": {
         "properties": {
@@ -293,6 +780,24 @@
         ],
         "title": "MetaInspectResponse"
       },
+      "NgramItem": {
+        "properties": {
+          "phrase": {
+            "type": "string",
+            "title": "Phrase"
+          },
+          "count": {
+            "type": "integer",
+            "title": "Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "phrase",
+          "count"
+        ],
+        "title": "NgramItem"
+      },
       "ReadabilityRequest": {
         "properties": {
           "text": {
@@ -335,6 +840,243 @@
         ],
         "title": "ReadabilityResponse"
       },
+      "RobotsGeneratorRequest": {
+        "properties": {
+          "site_url": {
+            "type": "string",
+            "title": "Site Url",
+            "default": "https://example.com",
+            "example": "https://example.com"
+          },
+          "disallow_paths": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Disallow Paths",
+            "default": [
+              "/admin/",
+              "/private/"
+            ],
+            "example": [
+              "/admin/",
+              "/private/"
+            ]
+          },
+          "allow_paths": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Allow Paths",
+            "default": [
+              "/"
+            ],
+            "example": [
+              "/"
+            ]
+          },
+          "sitemap_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sitemap Url",
+            "default": "https://example.com/sitemap.xml",
+            "example": "https://example.com/sitemap.xml"
+          },
+          "user_agents": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "User Agents",
+            "default": [
+              "*"
+            ],
+            "example": [
+              "*"
+            ]
+          }
+        },
+        "type": "object",
+        "title": "RobotsGeneratorRequest"
+      },
+      "RobotsGeneratorResponse": {
+        "properties": {
+          "robots_txt": {
+            "type": "string",
+            "title": "Robots Txt"
+          },
+          "rules_count": {
+            "type": "integer",
+            "title": "Rules Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "robots_txt",
+          "rules_count"
+        ],
+        "title": "RobotsGeneratorResponse"
+      },
+      "SchemaGenerateRequest": {
+        "properties": {
+          "schema_type": {
+            "type": "string",
+            "title": "Schema Type",
+            "description": "Supported types: 'article', 'product', 'faq'",
+            "example": "article"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title",
+            "example": "How to Build Ultra-Fast APIs with Python"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description",
+            "example": "Learn how to build production-ready APIs."
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Url",
+            "example": "https://example.com/fastapi-guide"
+          },
+          "author_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Author Name",
+            "default": "Editorial Team",
+            "example": "John Doe"
+          },
+          "image_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Image Url",
+            "example": "https://example.com/banner.jpg"
+          },
+          "price": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Price",
+            "example": 29.99
+          },
+          "currency": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Currency",
+            "default": "USD",
+            "example": "USD"
+          },
+          "faq_items": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/FAQItem"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Faq Items"
+          }
+        },
+        "type": "object",
+        "required": [
+          "schema_type",
+          "title"
+        ],
+        "title": "SchemaGenerateRequest"
+      },
+      "SchemaGenerateResponse": {
+        "properties": {
+          "schema_type": {
+            "type": "string",
+            "title": "Schema Type"
+          },
+          "json_ld": {
+            "type": "string",
+            "title": "Json Ld"
+          },
+          "is_valid": {
+            "type": "boolean",
+            "title": "Is Valid"
+          }
+        },
+        "type": "object",
+        "required": [
+          "schema_type",
+          "json_ld",
+          "is_valid"
+        ],
+        "title": "SchemaGenerateResponse"
+      },
       "SlugifyRequest": {
         "properties": {
           "text": {
@@ -351,8 +1093,8 @@
                 "type": "null"
               }
             ],
-            "default": "en",
             "title": "Language",
+            "default": "en",
             "example": "en"
           },
           "remove_stopwords": {
@@ -364,8 +1106,8 @@
                 "type": "null"
               }
             ],
-            "default": true,
             "title": "Remove Stopwords",
+            "default": true,
             "example": true
           }
         },
@@ -397,6 +1139,46 @@
           "word_count"
         ],
         "title": "SlugifyResponse"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
       }
     }
   }
