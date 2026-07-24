@@ -1,4 +1,4 @@
-# 🚀 All-in-One SEO & Web Micro-Services API (v1.1.0)
+# 🚀 SEO Matrix - All-in-One SEO & Schema API (v1.1.0)
 
 A fast, serverless Python FastAPI micro-service suite for SEO automation, JSON-LD Schema generation, LSI keyword extraction, content auditing, and web parsing. Hosted on Vercel Serverless Edge Infrastructure.
 

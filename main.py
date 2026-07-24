@@ -11,8 +11,8 @@ from bs4 import BeautifulSoup
 
 # Initialize FastAPI App (v1.1.0)
 app = FastAPI(
-    title="All-in-One SEO Toolkit API",
-    description="Ultra-fast micro-services for SEO slugification, keyword extraction, meta inspection, readability, JSON-LD schema generation, LSI phrases, content audits, link analysis, and robots.txt generation.",
+    title="SEO Matrix - All-in-One SEO & Schema API",
+    description="Ultra-fast micro-services for JSON-LD Schema generation, LSI keywords, Helpful Content audits, URL slugifying, readability, and meta inspection.",
     version="1.1.0"
 )
 
