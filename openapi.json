@@ -5,6 +5,12 @@
     "description": "Ultra-fast micro-services for JSON-LD Schema generation, LSI keywords, Helpful Content audits, URL slugifying, readability, and meta inspection.",
     "version": "1.1.0"
   },
+  "servers": [
+    {
+      "url": "https://seotoolkitapi.vercel.app",
+      "description": "Production Server (Vercel)"
+    }
+  ],
   "paths": {
     "/": {
       "get": {

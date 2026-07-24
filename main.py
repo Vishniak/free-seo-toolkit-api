@@ -13,7 +13,10 @@ from bs4 import BeautifulSoup
 app = FastAPI(
     title="SEO Matrix - All-in-One SEO & Schema API",
     description="Ultra-fast micro-services for JSON-LD Schema generation, LSI keywords, Helpful Content audits, URL slugifying, readability, and meta inspection.",
-    version="1.1.0"
+    version="1.1.0",
+    servers=[
+        {"url": "https://seotoolkitapi.vercel.app", "description": "Production Server (Vercel)"}
+    ]
 )
 
 # Enable CORS for cross-origin access
