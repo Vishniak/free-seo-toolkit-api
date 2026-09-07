@@ -1,0 +1,16 @@
+name: Keep-Alive & Zero Cold Start Pinger
+
+on:
+  schedule:
+    # Запуск каждые 10 минут для поддержания serverless-контейнера Vercel в горячем состоянии
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Production Vercel Engine
+        run: |
+          STATUS=$(curl -s -o /dev/null -w "%{http_code} (Total Latency: %{time_total}s)" https://seotoolkitapi.vercel.app/)
+          echo "Keep-Alive Ping Result: $STATUS"
