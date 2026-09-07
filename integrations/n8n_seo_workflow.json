@@ -1,0 +1,249 @@
+{
+  "name": "Automated SEO Audit & JSON-LD Generator (All-in-One SEO Toolkit)",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "1c7e9a80-0001-4000-8000-000000000001",
+      "name": "When clicking ‘Test workflow’",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        200,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "article_title",
+              "value": "Ultimate Guide to AI & Python SEO Automation in 2026"
+            },
+            {
+              "name": "article_content",
+              "value": "High performance web APIs are built with FastAPI. High performance web applications use Python to streamline automation workflows. By leveraging automated SEO microservices, content creators can extract semantic LSI keywords, audit readability, and inject structured data directly into their content pipelines without manual bottlenecks."
+            },
+            {
+              "name": "author_name",
+              "value": "Automated Content Studio"
+            },
+            {
+              "name": "rapidapi_key",
+              "value": "PASTE_YOUR_RAPIDAPI_KEY_HERE"
+            },
+            {
+              "name": "use_direct_vercel",
+              "value": "true"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "1c7e9a80-0001-4000-8000-000000000002",
+      "name": "Input Article & Credentials",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [
+        420,
+        300
+      ],
+      "notesInFlow": true,
+      "notes": "Enter your article text and RapidAPI Key. For free unlimited dev testing, keep use_direct_vercel=true."
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.use_direct_vercel === 'true' ? 'https://seotoolkitapi.vercel.app/v1/seo/lsi-keywords' : 'https://all-in-one-seo-toolkit-api.p.rapidapi.com/v1/seo/lsi-keywords' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "x-rapidapi-key",
+              "value": "={{ $json.rapidapi_key }}"
+            },
+            {
+              "name": "x-rapidapi-host",
+              "value": "all-in-one-seo-toolkit-api.p.rapidapi.com"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": \"{{ $json.article_content }}\",\n  \"top_n\": 10,\n  \"min_ngram\": 2,\n  \"max_ngram\": 3\n}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "1c7e9a80-0001-4000-8000-000000000003",
+      "name": "Extract LSI Keywords",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        680,
+        180
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Input Article & Credentials').item.json.use_direct_vercel === 'true' ? 'https://seotoolkitapi.vercel.app/v1/seo/content-audit' : 'https://all-in-one-seo-toolkit-api.p.rapidapi.com/v1/seo/content-audit' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "x-rapidapi-key",
+              "value": "={{ $('Input Article & Credentials').item.json.rapidapi_key }}"
+            },
+            {
+              "name": "x-rapidapi-host",
+              "value": "all-in-one-seo-toolkit-api.p.rapidapi.com"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text_or_html\": \"{{ $('Input Article & Credentials').item.json.article_content }}\"\n}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "1c7e9a80-0001-4000-8000-000000000004",
+      "name": "Audit Content & Readability",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        680,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Input Article & Credentials').item.json.use_direct_vercel === 'true' ? 'https://seotoolkitapi.vercel.app/v1/seo/schema-generate' : 'https://all-in-one-seo-toolkit-api.p.rapidapi.com/v1/seo/schema-generate' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "x-rapidapi-key",
+              "value": "={{ $('Input Article & Credentials').item.json.rapidapi_key }}"
+            },
+            {
+              "name": "x-rapidapi-host",
+              "value": "all-in-one-seo-toolkit-api.p.rapidapi.com"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"schema_type\": \"article\",\n  \"title\": \"{{ $('Input Article & Credentials').item.json.article_title }}\",\n  \"description\": \"{{ $('Input Article & Credentials').item.json.article_title }}\",\n  \"author_name\": \"{{ $('Input Article & Credentials').item.json.author_name }}\"\n}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "1c7e9a80-0001-4000-8000-000000000005",
+      "name": "Generate JSON-LD Schema",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        680,
+        500
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const inputData = $('Input Article & Credentials').first().json;\nconst lsiData = $('Extract LSI Keywords').first().json;\nconst auditData = $('Audit Content & Readability').first().json;\nconst schemaData = $('Generate JSON-LD Schema').first().json;\n\nreturn [{\n  json: {\n    title: inputData.article_title,\n    content: inputData.article_content,\n    seo_score: auditData.helpful_content_score || 85,\n    readability_difficulty: auditData.reading_difficulty || 'Standard',\n    sentences_count: auditData.sentences_count,\n    avg_words_per_sentence: auditData.avg_words_per_sentence,\n    top_lsi_keywords: (lsiData.top_ngrams || []).slice(0, 5),\n    schema_markup_tag: `<script type=\"application/ld+json\">${schemaData.json_ld}</script>`,\n    is_ready_for_publishing: (auditData.helpful_content_score || 85) >= 70\n  }\n}];"
+      },
+      "id": "1c7e9a80-0001-4000-8000-000000000006",
+      "name": "Merge & Format SEO Report",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        940,
+        340
+      ]
+    }
+  ],
+  "connections": {
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "Input Article & Credentials",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Input Article & Credentials": {
+      "main": [
+        [
+          {
+            "node": "Extract LSI Keywords",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Audit Content & Readability",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Generate JSON-LD Schema",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract LSI Keywords": {
+      "main": [
+        [
+          {
+            "node": "Merge & Format SEO Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Audit Content & Readability": {
+      "main": [
+        [
+          {
+            "node": "Merge & Format SEO Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate JSON-LD Schema": {
+      "main": [
+        [
+          {
+            "node": "Merge & Format SEO Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

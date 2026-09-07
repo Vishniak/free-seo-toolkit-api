@@ -36,6 +36,16 @@ A fast, serverless Python FastAPI micro-service suite for SEO automation, JSON-L
 
 ---
 
+## 🧩 1-Click No-Code Automations (n8n & Make.com)
+
+Pre-built workflow blueprints for automating SEO audits, LSI phrase extraction, and Schema injection:
+
+- **n8n Workflow:** [`integrations/n8n_seo_workflow.json`](./integrations/n8n_seo_workflow.json) — Import directly into self-hosted or cloud n8n.
+- **Make.com Blueprint:** [`integrations/make_seo_blueprint.json`](./integrations/make_seo_blueprint.json) — Import into Make.com (Integromat) scenarios.
+- **AI Agent Action Guide:** [GPT_ACTION_GUIDE.md](./GPT_ACTION_GUIDE.md) — Connect with Custom GPTs & LangChain.
+
+---
+
 ## 🛠️ Quick Start (Python Example)
 
 ```python

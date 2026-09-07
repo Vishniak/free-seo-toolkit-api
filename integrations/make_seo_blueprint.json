@@ -1,0 +1,161 @@
+{
+  "name": "SEO Content Optimization & Schema Blueprint (RapidAPI All-in-One)",
+  "flow": [
+    {
+      "id": 1,
+      "module": "util:SetVariables",
+      "version": 1,
+      "parameters": {},
+      "mapper": {
+        "variables": [
+          {
+            "name": "article_title",
+            "value": "Ultimate Guide to AI & Python SEO Automation in 2026"
+          },
+          {
+            "name": "article_content",
+            "value": "High performance web APIs are built with FastAPI. Content teams use automated SEO pipelines to extract semantic LSI keywords, audit readability, and inject structured JSON-LD data without manual delays."
+          },
+          {
+            "name": "author_name",
+            "value": "Marketing Automation Lab"
+          },
+          {
+            "name": "rapidapi_key",
+            "value": "PASTE_YOUR_RAPIDAPI_KEY_HERE"
+          }
+        ]
+      },
+      "metadata": {
+        "designer": {
+          "x": 0,
+          "y": 0,
+          "name": "Article Input & Config"
+        }
+      }
+    },
+    {
+      "id": 2,
+      "module": "http:ActionMakeRequest",
+      "version": 3,
+      "parameters": {
+        "handleErrors": false,
+        "useNewPurePrimitiveTypes": true
+      },
+      "mapper": {
+        "url": "https://all-in-one-seo-toolkit-api.p.rapidapi.com/v1/seo/lsi-keywords",
+        "method": "POST",
+        "headers": [
+          {
+            "name": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "name": "x-rapidapi-key",
+            "value": "{{1.rapidapi_key}}"
+          },
+          {
+            "name": "x-rapidapi-host",
+            "value": "all-in-one-seo-toolkit-api.p.rapidapi.com"
+          }
+        ],
+        "bodyType": "raw",
+        "parseResponse": true,
+        "contentType": "application/json",
+        "data": "{\"text\": \"{{1.article_content}}\", \"top_n\": 10, \"min_ngram\": 2, \"max_ngram\": 3}"
+      },
+      "metadata": {
+        "designer": {
+          "x": 300,
+          "y": 0,
+          "name": "1. Extract LSI Keywords"
+        }
+      }
+    },
+    {
+      "id": 3,
+      "module": "http:ActionMakeRequest",
+      "version": 3,
+      "parameters": {
+        "handleErrors": false,
+        "useNewPurePrimitiveTypes": true
+      },
+      "mapper": {
+        "url": "https://all-in-one-seo-toolkit-api.p.rapidapi.com/v1/seo/content-audit",
+        "method": "POST",
+        "headers": [
+          {
+            "name": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "name": "x-rapidapi-key",
+            "value": "{{1.rapidapi_key}}"
+          },
+          {
+            "name": "x-rapidapi-host",
+            "value": "all-in-one-seo-toolkit-api.p.rapidapi.com"
+          }
+        ],
+        "bodyType": "raw",
+        "parseResponse": true,
+        "contentType": "application/json",
+        "data": "{\"text_or_html\": \"{{1.article_content}}\"}"
+      },
+      "metadata": {
+        "designer": {
+          "x": 600,
+          "y": 0,
+          "name": "2. Helpful Content Audit"
+        }
+      }
+    },
+    {
+      "id": 4,
+      "module": "http:ActionMakeRequest",
+      "version": 3,
+      "parameters": {
+        "handleErrors": false,
+        "useNewPurePrimitiveTypes": true
+      },
+      "mapper": {
+        "url": "https://all-in-one-seo-toolkit-api.p.rapidapi.com/v1/seo/schema-generate",
+        "method": "POST",
+        "headers": [
+          {
+            "name": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "name": "x-rapidapi-key",
+            "value": "{{1.rapidapi_key}}"
+          },
+          {
+            "name": "x-rapidapi-host",
+            "value": "all-in-one-seo-toolkit-api.p.rapidapi.com"
+          }
+        ],
+        "bodyType": "raw",
+        "parseResponse": true,
+        "contentType": "application/json",
+        "data": "{\"schema_type\": \"article\", \"title\": \"{{1.article_title}}\", \"description\": \"{{1.article_title}}\", \"author_name\": \"{{1.author_name}}\"}"
+      },
+      "metadata": {
+        "designer": {
+          "x": 900,
+          "y": 0,
+          "name": "3. Generate JSON-LD Schema"
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "instant": false,
+    "version": 1,
+    "scenario": {
+      "roundtrips": 1,
+      "maxErrors": 3,
+      "autoCommit": true
+    }
+  }
+}
